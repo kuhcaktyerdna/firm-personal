@@ -1,18 +1,25 @@
+package com.intexsoft;
+
+import com.intexsoft.comparators.BirthDateComparator;
+import com.intexsoft.comparators.EnteringDateComparator;
+import com.intexsoft.comparators.NameComparator;
+import com.intexsoft.workers.Worker;
+
 import java.util.ArrayList;
 
 public class WorkersRepository {
-    public final static WorkersRepository instance = new WorkersRepository();
+    public final static WorkersRepository INSTANCE = new WorkersRepository();
 	private ArrayList<Worker> repository = new ArrayList<>();
     private int id = 0;
 
 	 private WorkersRepository() {}
 
-	 public  ArrayList<Worker> getRepository() {
+    public  ArrayList<Worker> getRepository() {
 		return repository;
 	}
 
 	public static WorkersRepository getInstance(){
-	     return instance;
+	     return INSTANCE;
     }
 
 	public void addWorker(Worker newWorker){

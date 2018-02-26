@@ -1,3 +1,7 @@
+package com.intexsoft.comparators;
+
+import com.intexsoft.workers.Worker;
+
 import java.util.Comparator;
 
 public class NameComparator implements Comparator<Worker> {

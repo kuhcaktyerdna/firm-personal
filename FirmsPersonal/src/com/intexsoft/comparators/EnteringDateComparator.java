@@ -1,6 +1,10 @@
+package com.intexsoft.comparators;
+
+import com.intexsoft.workers.Worker;
+
 import java.util.Comparator;
 
-public class BirthDateComparator implements Comparator<Worker> {
+public class EnteringDateComparator implements Comparator<Worker> {
 
     @Override
     public int compare(Worker w1, Worker w2) {

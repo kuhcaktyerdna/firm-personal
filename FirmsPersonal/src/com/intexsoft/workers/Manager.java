@@ -1,3 +1,5 @@
+package com.intexsoft.workers;
+
 import java.util.ArrayList;
 import java.util.Date;
 

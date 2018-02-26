@@ -1,3 +1,6 @@
+package com.intexsoft;
+
+import com.intexsoft.workers.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -16,34 +19,75 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class Controller {
+public class Service {
 
 	private WorkersRepository workersRepository = WorkersRepository.getInstance();
-    public static final Controller instance = new Controller();
+    public static final Service INSTANCE = new Service();
 
-	public static Controller getInstance(){
-	    return instance;
+	private Service(){}
+
+    public static Service getInstance(){
+	    return INSTANCE;
     }
 
+	public  ArrayList<Worker> getRepository(){
+    	return workersRepository.getRepository();
+	}
+
+	public void addWorker(Worker newWorker){
+		workersRepository.addWorker(newWorker);
+	}
+
+	public void addWorkers(Worker[] newWorkers){
+		workersRepository.addWorkers(newWorkers);
+	}
+
+	public void addWorkers(ArrayList<Worker> newWorkers){
+		workersRepository.addWorkers(newWorkers);
+	}
+
+	public void removeWorker(int id){
+		workersRepository.removeWorker(id);
+	}
+
+	public Worker getWorkerById(int id){
+		return workersRepository.getWorkerById(id);
+	}
+
+	public void removeWorkers(int[] ids){
+		workersRepository.removeWorkers(ids);
+	}
+
+	public void sortByName(){
+		workersRepository.sortByName();
+	}
+
+	public void sortByBirthDate(){
+		workersRepository.sortByBirthDate();
+	}
+
+	public void sortByEnteringDate(){
+		workersRepository.sortByEnteringDate();
+	}
 
     public Worker switchPosition(Worker worker, String position){
 	    switch (position){
-	        case "Manager":
+	        case "com.intexsoft.workers.Manager":
 				worker = new Manager(worker.getFullName(),
 						worker.getBirthDate(), worker.getEnteringDate());
                 break;
 
-            case "Employee":
+            case "com.intexsoft.workers.Employee":
 				worker = new Employee(worker.getFullName(),
 						worker.getBirthDate(), worker.getEnteringDate());
                 break;
 
-            case "Head":
+            case "com.intexsoft.workers.Head":
 				worker = new Head(worker.getFullName(),
 						worker.getBirthDate(), worker.getEnteringDate());
 				break;
 
-            case "Secretary":
+            case "com.intexsoft.workers.Secretary":
 				worker = new Secretary(worker.getFullName(),
 						worker.getBirthDate(), worker.getEnteringDate());
                 break;
@@ -54,7 +98,6 @@ public class Controller {
         return worker;
     }
 
-    //writing to *.xml
 	public void writeList(){
 		DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT,
 				new Locale("BY"));
@@ -64,7 +107,7 @@ public class Controller {
 			Element root = document.createElement("root");
 			document.appendChild(root);
 			int i = 1;
-			for(Worker w : WorkersRepository.instance.getRepository()) {
+			for(Worker w : WorkersRepository.INSTANCE.getRepository()) {
 				Element worker = document.createElement("worker"+i);
 				i++;
 				root.appendChild(worker);
@@ -92,29 +135,42 @@ public class Controller {
 	}
 
     public void readList(File file) {
-		ArrayList<Worker> readedWorkers = new ArrayList<>();
-		try{
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy",
-					new Locale("BY"));
-			List<String> lines = Files.readAllLines(Paths.get(file.getName()),
-					StandardCharsets.UTF_8);
-			for (int i = 0; i < lines.size(); i=+3){
-				Worker worker = new Worker();
-				worker.setFullName(lines.get(i));
-				worker.setBirthDate(
-						sdf.parse(lines.get(i+1)));
-				worker.setEnteringDate(
-						sdf.parse(lines.get(i+2)));
-				readedWorkers.add(worker);
-			}
-		} catch (ParseException pe){
-			System.err.println(pe);
-		} catch (FileNotFoundException fe) {
-			System.err.println(fe);
-		} catch (IOException ioe) {
-			System.err.println(ioe);
+		if(!file.exists()){
+			System.out.println("File not found.");
+			System.exit(0);
 		}
-		WorkersRepository.instance.addWorkers(readedWorkers);
-	}
+		if(file != null){
+			ArrayList<Worker> readedWorkers = new ArrayList<>();
+			try{
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy",
+						new Locale("BY"));
+				List<String> lines = Files.readAllLines(Paths.get(file.getName()),
+						StandardCharsets.UTF_8);
+				System.out.println(lines.size());
+				for (int i = 0; i < lines.size(); i++){
+					Worker worker = new Worker();
+					worker.setFullName(lines.get(i));
+					worker.setBirthDate(
+							sdf.parse(lines.get(i+1)));
+					worker.setEnteringDate(
+							sdf.parse(lines.get(i+2)));
+					i += 2;
+					System.out.println(worker);
+					readedWorkers.add(worker);
+				}
+			} catch (ParseException pe){
+				System.err.println(pe);
+			} catch (FileNotFoundException fe) {
+				System.err.println(fe);
+			} catch (IOException ioe) {
+				System.err.println(ioe);
+			}
+			WorkersRepository.INSTANCE.addWorkers(readedWorkers);
+		}
+		else {
+			System.out.println("File is empty.");
+			System.exit(0);
+		}
 
+	}
 }

@@ -1,9 +1,11 @@
+package com.intexsoft.workers;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.text.DateFormat;
 import java.util.Locale;
 
-public class Worker implements Serializable {
+public class Worker {
 
 	private String fullName;
 	private Date birthDate;

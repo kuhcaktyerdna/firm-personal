@@ -1,3 +1,5 @@
+package com.intexsoft.workers;
+
 import java.util.Date;
 
 public class Head extends Worker {
